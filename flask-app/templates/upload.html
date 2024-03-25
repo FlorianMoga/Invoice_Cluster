@@ -1,0 +1,225 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>InvoiceCluster</title>
+
+<style>
+body {
+            background-color: #F0F4EF;
+			}
+
+			.center {
+				position: absolute;
+				margin: 0;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				-ms-transform: translate(-50%, -50%);
+			}
+
+			.blur-radio {
+				margin-bottom: 15px;
+			}
+
+			.model-radio {
+				margin-bottom: 15px;
+			}
+
+			.download-zip {
+				height: 50px;
+				position: relative;
+			}
+
+			.col-12 {
+				position: relative;
+				width: 50%;
+			}
+
+			img{
+				width: 100%;
+				height: 100%;
+			}
+
+			.label-header {
+				margin-bottom: 0px;
+			}
+
+			.label-subheader {
+				font-size: 12px;
+				margin-bottom: 3px;
+			}
+
+			.container {
+				width: 60%;
+				min-width: 600px;
+			}
+
+			.col-12 img {
+				opacity: 1;
+				width: 100%;
+				display: block;
+				transition: .5s ease;
+				backface-visibility: hidden;
+				margin-bottom: 10px;
+				margin-top: 10px;
+			}
+
+			#upload_container {
+				display: block;
+				margin: auto;
+				width: 100%;
+				margin-top: 30px;
+				text-align: center;
+				background-color: #F0F4EF;
+				padding: 20px;
+				border-radius: 5px 15px;
+			}
+
+			#imageBitmap {
+                width: 500px;
+                height: 375px;
+                background-color: #666;
+                display: none;
+            }
+
+			#form_container {
+				display: block;
+				margin:auto;
+				max-width: 60%;
+				min-width: 600px;
+				background-color: #344966;
+				padding: 15px;
+				border-radius: 5px;
+				color: #F0F4EF;
+			}
+
+			.middle {
+				transition: .5s ease;
+				opacity: 0;
+				position: absolute;
+				top: 50%;
+				right: 50%;
+				transform: translate(50%, -50%);
+				text-align: center;
+			}
+
+			.text {
+				background-color: #344966;
+				color: white;
+				font-size: 16px;
+				padding: 16px 32px;
+				text-decoration: none;
+				border-radius: 5px;
+			}
+
+			.text:hover {
+				text-decoration: none;
+			}
+
+			.col-12:hover .middle {
+				opacity: 1;
+			}
+
+			.col-12:hover img {
+				opacity: 0.3;
+			}
+
+			@media only screen and (max-width: 700px) {
+				#form_container {
+					max-width: 100%;
+					min-width: 100%;
+				}
+
+				.container {
+					width: 100%;
+					min-width: 0px;
+				}
+
+				.text {
+					font-size: 12px;
+				}
+
+				h4 {
+					font-size: 14px;
+					margin-top: 10px;
+					margin-bottom: 10px;
+				}
+			}
+</style>
+</head>
+<body>
+<div id="upload_container">
+    <h1>InvoiceCluster</h1>
+    <p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+    <ul class=flashes>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    </p>
+
+    <div id="form_container" style="">
+        <form method="post" action="/invocations" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <strong><p style="font-size: 20px">Invoices to cluster
+                    <p></strong>
+                <input class="form-control"
+                       type="file" name="files[]" id="files"
+                       multiple="true" autocomplete="off">
+            </div>
+
+            <b><p class="label-header">Return type</p></b>
+            <div class="blur-radio btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                    <input type="radio" name="return_type" id="bb" value="bb" autocomplete="off" checked>
+                    Bounding box
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="return_type" id="roi" value="roi" autocomplete="off">
+                    ROI
+                </label>
+            </div>
+            <p>
+                <input type="submit" value="Submit" name='submit_button' class='btn btn-default'>
+            </p>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    {% if filepaths %}
+    <div class="row d-flex flex-wrap align-items-center">
+        {% for filepath in filepaths %}
+        <div class="col-12 col-md-6 col-lg-6">
+            <img src="{{ filepath }}">
+            <div class="middle">
+                <a href="/cluster/{{ filepath.split('/')[-1] }}">
+                    <div class="text">Cluster</div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</body>
+</html>
